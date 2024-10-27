@@ -2,6 +2,7 @@ import { ApplicationRef, ChangeDetectionStrategy, Component, inject, OnDestroy, 
 import { PokemonListComponent } from "../../pokemons/components/pokemon-list/pokemon-list.component";
 import { PokemonListSkeletonComponent } from "./ui/pokemon-list-skeleton/pokemon-list-skeleton.component";
 import { PokemonsService } from '../../pokemons/services/pokemons.service';
+import { SimplePokemon } from '../../pokemons/interfaces';
 
 @Component({
   selector: 'app-pokemons-page',
@@ -14,6 +15,7 @@ import { PokemonsService } from '../../pokemons/services/pokemons.service';
 export default class PokemonsPageComponent implements OnInit {
 
   private pokemonSrv = inject(PokemonsService);
+  public pokemons = signal<SimplePokemon[]>([]);
 
   // public isLoading = signal(true);
   // private appRef = inject(ApplicationRef);
@@ -31,7 +33,7 @@ export default class PokemonsPageComponent implements OnInit {
   public loadPokemons(nextPage: number = 0): void {
     this.pokemonSrv.loadPage(nextPage)
       .subscribe((pokemons) => {
-        console.log({ pokemons });
+        this.pokemons.set(pokemons);
       });
   }
 
