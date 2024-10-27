@@ -15,7 +15,9 @@ export class PokemonsService {
     /**
      * @description Si la página es 0 se decrementa para que el API de PokeAPI
      */
-    if(page === 0) { --page; }
+    if(page === 1) {
+      --page;
+    }
 
     page = Math.max(0, page);
 
