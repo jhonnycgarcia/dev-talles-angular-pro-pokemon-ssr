@@ -1,0 +1,17 @@
+@if(!pokemon()) {
+    <div class="flex justify-center">
+      <h1 class="text-4xl font-bold">Loading...</h1>
+    </div>
+} @else {
+  <section
+    class="flex flex-col items-center justify-center"
+  >
+    <div class="flex justify-center">
+      <h1 class="text-4xl font-bold capitalize my-5">
+        {{ pokemon()!.name }}
+      </h1>
+    </div>
+  </section>
+}
+
+
