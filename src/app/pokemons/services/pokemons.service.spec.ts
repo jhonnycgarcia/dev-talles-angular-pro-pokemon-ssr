@@ -55,7 +55,6 @@ describe('PokemonsService', () => {
   });
 
   it('should load a page of SimplePokemons', async () => {
-
     service.loadPage(1).subscribe((pokemons) => {
       expect(pokemons).toEqual(expectedPokemons);
     });
@@ -66,5 +65,46 @@ describe('PokemonsService', () => {
     // Establecer el mock de respuesta
     req.flush(mockPokeResponse);
   });
+
+
+  it('should load a page 5 of Pokemos', async () => {
+    service.loadPage(5).subscribe((pokemons) => {
+      expect(pokemons).toEqual(expectedPokemons);
+    });
+
+    const req = httpMock.expectOne(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=80`);
+    expect(req.request.method).toBe('GET');
+
+    // Establecer el mock de respuesta
+    req.flush(mockPokeResponse);
+  });
+
+  it('should load a Pokemon by ID', async () => {
+    service.loadPokemon(mockPokemon.id).subscribe((pokemon: any) => {
+      expect(pokemon).toEqual(mockPokemon as any);
+      expect(pokemon.id).toBe(mockPokemon.id);
+    });
+
+    const req = httpMock.expectOne(`https://pokeapi.co/api/v2/pokemon/${mockPokemon.id}`);
+    expect(req.request.method).toBe('GET');
+
+    // Establecer el mock de respuesta
+    req.flush(mockPokemon);
+  });
+
+  it('should load a Pkemon by Name', async () => {
+    service.loadPokemon(mockPokemon.name).subscribe((pokemon: any) => {
+      expect(pokemon).toEqual(mockPokemon as any);
+      expect(pokemon.name).toBe(mockPokemon.name);
+    });
+
+    const req = httpMock.expectOne(`https://pokeapi.co/api/v2/pokemon/${mockPokemon.name}`);
+    expect(req.request.method).toBe('GET');
+
+    // Establecer el mock de respuesta
+    req.flush(mockPokemon);
+  });
+
+  // Disparar errores
 
 });

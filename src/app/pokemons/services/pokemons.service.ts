@@ -15,13 +15,13 @@ export class PokemonsService {
     /**
      * @description Si la página es 0 se decrementa para que el API de PokeAPI
      */
-    if(page === 1) {
+    if(page !== 0) {
       --page;
     }
 
     page = Math.max(0, page);
 
-    return this.http.get<PokeAPIResponse>(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 10}`)
+    return this.http.get<PokeAPIResponse>(`https://pokeapi.co/api/v2/pokemon?limit=20&offset=${page * 20}`)
       .pipe(
         map((res) => {
           const simplePokemons: SimplePokemon[] = res.results.map(
