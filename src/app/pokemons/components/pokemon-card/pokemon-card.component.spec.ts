@@ -39,4 +39,34 @@ describe('PokemonCardComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should have the SimplePokemon signal inputValue', () => {
+    expect(component.pokemon()).toEqual(mockPokemon as any);
+  });
+
+  it('should have the pokemon name and image correctly', () => {
+    const image = compiled.querySelector('img')!;
+    expect(image).toBeDefined();
+
+    const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${mockPokemon.id}.png`
+    expect(imageUrl).toBe(image.src);
+
+    const pokemonName = compiled.querySelector('h2')!;
+    expect(pokemonName).toBeDefined();
+    expect(pokemonName.textContent!.trim()).toBe(mockPokemon.name);
+  });
+
+  it('should have the proper ng-reflext-router-link', () => {
+    const divWithLink = compiled.querySelector('div')!;
+    expect(divWithLink.querySelector('a'))
+    .toBeDefined();
+
+    expect(divWithLink.attributes.getNamedItem('ng-reflect-router-link'))
+      .toBeDefined();
+
+    console.log(divWithLink.attributes.getNamedItem('ng-reflect-router-link')!.value);
+
+    expect(divWithLink.attributes.getNamedItem('ng-reflect-router-link')!.value)
+      .toBe(`/pokemons,${mockPokemon.name}`);
+  });
+
 });
