@@ -6,8 +6,6 @@ const TOTAL_PAGES = 5;
  * node --watch scripts/prerender-routes.js
  */
 (async () => {
-  console.log('Hello world');
-
   const fs = require('fs');
 
   // Crear pokemones por ID's
