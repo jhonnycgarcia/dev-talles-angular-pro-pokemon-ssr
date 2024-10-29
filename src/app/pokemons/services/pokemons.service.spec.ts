@@ -4,6 +4,7 @@ import { provideHttpClient } from '@angular/common/http';
 
 import { PokemonsService } from './pokemons.service';
 import { PokeAPIResponse, SimplePokemon } from '../interfaces';
+import { catchError } from 'rxjs';
 
 const mockPokeResponse: PokeAPIResponse = {
   "count": 1302,
@@ -106,5 +107,38 @@ describe('PokemonsService', () => {
   });
 
   // Disparar errores
+  it('should load a Pokemon by ID', async () => {
+    service.loadPokemon(mockPokemon.id).subscribe((pokemon: any) => {
+      expect(pokemon).toEqual(mockPokemon as any);
+      expect(pokemon.id).toBe(mockPokemon.id);
+    });
+
+    const req = httpMock.expectOne(`https://pokeapi.co/api/v2/pokemon/${mockPokemon.id}`);
+    expect(req.request.method).toBe('GET');
+
+    // Establecer el mock de respuesta
+    req.flush(mockPokemon);
+  });
+
+  it('should catch error if the Pokemon does not exist', async () => {
+    const pokemonName = 'unknown-pokemon';
+    service.loadPokemon(pokemonName)
+    .pipe(
+      catchError((err) => {
+        expect(err.message).toContain('Pokemons not found');
+        return [];
+      })
+    )
+    .subscribe();
+
+    const req = httpMock.expectOne(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+    expect(req.request.method).toBe('GET');
+
+    // Establecer el mock de respuesta
+    req.flush('Pokemons not found', {
+      status: 404,
+      statusText: 'Not Found'
+    });
+  });
 
 });
