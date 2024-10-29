@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { provideRouter } from '@angular/router';
-import { app } from '../../server';
+import { Component } from '@angular/core';
+import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 describe('AppComponent', () => {
 
@@ -9,13 +10,31 @@ describe('AppComponent', () => {
   let app: AppComponent;
   let compiled: HTMLElement;
 
+  @Component({
+    selector: 'shared-navbar',
+    standalone: true,
+    template: `<div>Hola Mundo</div>`
+  }) class NavbarComponentMock {}
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
         provideRouter([])
       ]
-    }).compileComponents();
+    })
+    .overrideComponent(
+      AppComponent,
+      {
+        add: {
+          imports: [NavbarComponentMock]
+        },
+        remove: {
+          imports: [NavbarComponent]
+        }
+      }
+    )
+    .compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
     app = fixture.componentInstance;
@@ -23,6 +42,7 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', () => {
+    console.log(compiled);
     expect(app).toBeTruthy();
   });
 
