@@ -20,6 +20,15 @@ const TOTAL_PAGES = 5;
     fileContent += `\n/pokemons/page/${i}`;
   }
 
+  // Páginas por nombre
+  const pokemonNameList = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${TOTAK_POKEMONS}&offset=0`)
+    .then((res) => res.json())
+    .then((pokemons) => pokemons.results.map((pokemon) => pokemon.name));
+
+  pokemonNameList.forEach((name) => {
+    fileContent += `\n/pokemons/${name}`;
+  });
+
   fs.writeFileSync('routes.txt', fileContent);
   console.log('Routes file created');
 })();
